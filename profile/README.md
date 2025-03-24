@@ -1,6 +1,6 @@
-# GC Cloud One
+# GC Cloud One: Aurora IaC
 
-Welcome to the **GC Cloud One** GitHub organization.
+Welcome to the **GC Cloud One: Aurora IaC** GitHub organization.
 
 ## General
 
