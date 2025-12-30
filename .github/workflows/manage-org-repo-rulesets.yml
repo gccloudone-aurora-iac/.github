@@ -17,7 +17,7 @@ jobs:
     steps:
       - name: Create GitHub App token
         id: create_token
-        uses: gccloudone/.github/.github/actions/create-app-token@main
+        uses: gccloudone-aurora-iac/.github/.github/actions/create-app-token@main
         with:
           app-id: ${{ vars.GCCO_ADMIN_APP_ID }}
           private-key: ${{ secrets.GCCO_ADMIN_APP_KEY }}
