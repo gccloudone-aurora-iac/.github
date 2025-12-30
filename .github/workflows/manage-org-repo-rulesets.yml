@@ -17,7 +17,7 @@ jobs:
     steps:
       - name: Create GitHub App token
         id: create_token
-        uses: actions/create-github-app-token@v1
+        uses: gccloudone/.github/.github/actions/create-app-token@main
         with:
           app-id: ${{ vars.GCCO_ADMIN_APP_ID }}
           private-key: ${{ secrets.GCCO_ADMIN_APP_KEY }}
@@ -41,13 +41,15 @@ jobs:
 
           # Retrieve existing rulesets
           echo "Getting existing organization rulesets..."
-          existing_ruleset_ids=$(gh api /orgs/"$org"/rulesets --jq '.[].id')
+          
+          existing_ruleset_ids=$(gh api /orgs/"$org"/rulesets --jq '.[]?.id')
 
           mapfile -t ruleset_ids <<< "$existing_ruleset_ids"
 
           # Delete existing rulesets
           if [ "${#ruleset_ids[@]}" -gt 0 ]; then
             for id in "${ruleset_ids[@]}"; do
+              [ -z "$id" ] && continue
               echo "  -> Deleting ruleset ID $id"
               gh api /orgs/"$org"/rulesets/"$id" --method DELETE \
                 -H "Accept: application/vnd.github+json" \
@@ -64,4 +66,4 @@ jobs:
             -H "X-GitHub-Api-Version: 2022-11-28" \
             --input "$ruleset_file"
 
-          echo "Ruleset applied!"
+          echo "\nRuleset applied!"
