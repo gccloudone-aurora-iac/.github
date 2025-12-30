@@ -15,12 +15,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Create GitHub App token
-        id: create_token
-        uses: gccloudone/.github/.github/actions/create-app-token@main
+      - name: Create app token for target org 
+        id: app-token
+        uses: actions/create-github-app-token@v1
         with:
-          app-id: ${{ vars.GCCO_ADMIN_APP_ID }}
-          private-key: ${{ secrets.GCCO_ADMIN_APP_KEY }}
+          app-id: ${{ secrets.AURORA_APP_ID }}
+          private-key: ${{ secrets.AURORA_APP_PRIVATE_KEY }}
+          owner: ${{ env.ORG }}
 
       - name: Checkout repo
         uses: actions/checkout@v6
