@@ -39,6 +39,10 @@
     {
       "actor_type": "OrganizationAdmin",
       "bypass_mode": "always"
+    },
+    {
+      "actor_type": "RepositoryAdmin",
+      "bypass_mode": "always"
     }
   ]
 }
