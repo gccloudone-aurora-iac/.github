@@ -23,38 +23,38 @@ runs:
   using: composite
   steps:
   - name: checkout
-    uses: actions/checkout@v4
+    uses: actions/checkout@v6
     with:
-      fetch_depth: 0
+      fetch-depth: 0
       token: ${{ secrets.GITHUB_TOKEN }}
 
   - name: Retrieve Latest Tag
     shell: bash
     run: |-
-      echo "CURRENT_TAG=$(git tag | egrep -v '[a-z'] sort -V | tail -1)" >> $GITHUB_ENV
+      echo "CURRENT_TAG=$(git tag | sort -V | tail -1)" >> $GITHUB_ENV
 
   - name: Get Semantic Version Attributes
     id: get_semver_attributes
     shell: bash
     run: |-
-      echo "MAJOR=$(echo $CURRENT_TAG | cut -d '.' -f 1)" >> $GITHUB_ENV
+      echo "MAJOR=$(echo $CURRENT_TAG | sed 's/^v//' | cut -d '.' -f 1)" >> $GITHUB_ENV
       echo "MINOR=$(echo $CURRENT_TAG | cut -d '.' -f 2)" >> $GITHUB_ENV
       echo "PATCH=$(echo $CURRENT_TAG | cut -d '.' -f 3)" >> $GITHUB_ENV
 
   - name: Generate new MAJOR version
     if: (github.event.inputs.release_type == 'MAJOR' || inputs.release_type == 'MAJOR')
     shell: bash
-    run: echo "NEW_TAG=$(($MAJOR+1).0.0" >> $GITHUB_ENV
+    run: echo "NEW_TAG=v$(($MAJOR+1).0.0" >> $GITHUB_ENV
 
   - name: Generate new MINOR version
     if: (github.event.inputs.release_type == 'MINOR' || inputs.release_type == 'MINOR')
     shell: bash
-    run: echo "NEW_TAG=$(($MAJOR)).$((MINOR+1)).0" >> $GITHUB_ENV
+    run: echo "NEW_TAG=v$(($MAJOR)).$((MINOR+1)).0" >> $GITHUB_ENV
 
   - name: Generate new PATCH version
     if: (github.event.inputs.release_type == 'PATCH' || inputs.release_type == 'PATCH')
     shell: bash
-    run: echo "NEW_TAG=$(($MAJOR)).$((MINOR)).$((PATCH+1))" >> $GITHUB_ENV
+    run: echo "NEW_TAG=v$(($MAJOR)).$((MINOR)).$((PATCH+1))" >> $GITHUB_ENV
 
   - name: Create Release
     env:
