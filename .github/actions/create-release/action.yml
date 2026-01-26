@@ -11,9 +11,6 @@ inputs:
       - PATCH
       - MINOR
       - MAJOR
-  # github_token:
-  #   description: "GitHub token"
-  #   required: true
   release_branch:
     description: "The branch to use for creating the release"
     required: true
@@ -44,7 +41,7 @@ runs:
   - name: Generate new MAJOR version
     if: (github.event.inputs.release_type == 'MAJOR' || inputs.release_type == 'MAJOR')
     shell: bash
-    run: echo "NEW_TAG=v$(($MAJOR+1).0.0" >> $GITHUB_ENV
+    run: echo "NEW_TAG=v$(($MAJOR+1)).0.0" >> $GITHUB_ENV
 
   - name: Generate new MINOR version
     if: (github.event.inputs.release_type == 'MINOR' || inputs.release_type == 'MINOR')
