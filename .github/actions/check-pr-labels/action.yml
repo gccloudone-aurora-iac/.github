@@ -7,10 +7,10 @@ inputs:
     required: true
     default: MAJOR,MINOR,PATCH
 
-# outputs:
-#   release_type:
-#     description: "Resolved release type"
-#     value: ${{ steps.resolve.outputs.release_type }}
+outputs:
+  release_type:
+    description: "Resolved release type"
+    value: ${{ steps.resolve.outputs.release_type }}
 
 
 runs:
@@ -20,7 +20,7 @@ runs:
       shell: bash
       run: |-
         ALLOWED_LABELS="${{ inputs.allowed_labels }}"
-        LABELS=$(jq -r '.pull_request.labels[].name' "$GITHUB_EVENT_OUTPUT")
+        LABELS=$(jq -r '.pull_request.labels[].name' "$GITHUB_EVENT_PATH")
 
         echo "PR labels:"
         echo "$LABELS"
