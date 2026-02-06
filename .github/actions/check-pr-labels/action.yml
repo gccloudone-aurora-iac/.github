@@ -32,7 +32,7 @@ runs:
         done
 
         # Trim Whitespaces
-        MATCH_LABEL="$(echo "$MATCH_LABEL | xargs)"
+        MATCH_LABEL="$(echo "$MATCH_LABEL" | xargs)"
 
         if [ -z "MATCH_LABEL" ]; then
           echo "::error::No valid release label found"
