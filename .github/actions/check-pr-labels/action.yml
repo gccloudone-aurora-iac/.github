@@ -21,18 +21,21 @@ runs:
       run: |-
         ALLOWED_LABELS="${{ inputs.allowed_labels }}"
         LABELS=$(jq -r '.pull_request.labels[].name' "$GITHUB_EVENT_PATH")
-
-        echo "PR labels:"
         echo "$LABELS"
 
+        if [ -z "$LABELS" ]; then
+          echo "::error::PR has no labels"
+          exit 1
+        fi
+
+        MATCH_LABEL=""
+
         for l in $(echo "$ALLOWED_LABELS" | tr ',' ' '); do
-          if echo "$LABELS" | grep -qa "$l"; then
+          if echo "$LABELS" | grep -qx "$l"; then
             MATCH_LABEL="$l"
+            break
           fi
         done
-
-        # Trim Whitespaces
-        MATCH_LABEL="$(echo "$MATCH_LABEL" | xargs)"
 
         if [ -z "MATCH_LABEL" ]; then
           echo "::error::No valid release label found"
@@ -44,6 +47,7 @@ runs:
           exit 1
         fi
 
+        TYPE="${MATCH_LABEL}"
         echo "release_type=$MATCH_LABEL" >> $GITHUB_OUTPUT
 
         echo "Label check complete"
