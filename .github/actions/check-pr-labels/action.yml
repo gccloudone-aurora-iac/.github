@@ -43,4 +43,6 @@ runs:
           exit 1
         fi
 
+        echo "release_type=$MATCH_LABEL" >> $GITHUB_OUTPUT
+        
         echo "Label check complete"
