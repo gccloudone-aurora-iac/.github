@@ -27,7 +27,7 @@ runs:
 
         for l in $(echo "$ALLOWED_LABELS" | tr ',' ' '); do
           if echo "$LABELS" | grep -qa "$l"; then
-            MATCH="$l"
+            MATCH_LABEL="$l"
           fi
         done
 
