@@ -5,7 +5,8 @@ runs:
   using: composite
   steps:
   - name: Ensure only one label is added
-    run: |
+    shell: bash
+    run: |-
       LABEL_COUNT=$(jq -r '.pull_request.labels | length' "$GITHUB_EVENT_OUTPUT")
 
       if ["LABEL_COUNT" -ne 1]; then
@@ -16,7 +17,8 @@ runs:
       echo "PR has one label only"
 
   - name: Ensure only one label is added
-    run: |
+    shell: bash
+    run: |-
       VALID_LABELS=("PATCH "MINOR" "MAJOR")
 
       # Retrieve labels from the PR payload
