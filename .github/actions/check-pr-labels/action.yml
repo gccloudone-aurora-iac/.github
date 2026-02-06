@@ -43,33 +43,4 @@ runs:
           exit 1
         fi
 
-
-  # - name: Ensure only one label is added
-  #   shell: bash
-  #   run: |-
-  #     LABEL_COUNT=$(jq -r '.pull_request.labels | length' "$GITHUB_EVENT_OUTPUT")
-
-  #     if ["LABEL_COUNT" -ne 1]; then
-  #       echo ":error::PR must have exactly one label, found $LABEL_COUNT"
-  #       exit 1
-  #     fi
-
-  #     echo "PR has one label only"
-
-  # - name: Ensure only one label is added
-  #   shell: bash
-  #   run: |-
-  #     VALID_LABELS=("PATCH "MINOR" "MAJOR")
-
-  #     # Retrieve labels from the PR payload
-  #     PR_LABELS=$(jq -r ".pull_request.labels[].name" "$GITHUB_EVENT_OUTPUT")  
-
-  #     echo "PR Labels: $PR_LABELS"
-
-  #     LABEL=$(echo "$PR_LABELS" | head -n 1)
-  #     if [[ ! " ${REQUIRED_LABELS[@]} " =~ " $LABEL "]]; then
-  #       echo "::error::Label '$LABEL' is not allowed. Must be one of: ${REQUIRED_LABELS[*]}"
-  #       exit 1
-  #     fi
-
-  #     echo "Valid label Present: $LABEL" 
+        echo "Label check complete"
