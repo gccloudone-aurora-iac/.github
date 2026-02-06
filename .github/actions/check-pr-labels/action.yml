@@ -38,7 +38,7 @@ runs:
           exit 1
         fi
 
-        if [ "$(echo "$LABELS" | wc -l)"-gt 1"]; then
+        if [ "$(echo "$LABELS" | wc -l)" -gt 1]; then
           echo "::error::Multiple labels found"
           exit 1
         fi
