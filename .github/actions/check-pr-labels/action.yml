@@ -25,13 +25,14 @@ runs:
         echo "PR labels:"
         echo "$LABELS"
 
-        MATCH_LABEL=""
-
         for l in $(echo "$ALLOWED_LABELS" | tr ',' ' '); do
           if echo "$LABELS" | grep -qa "$l"; then
             MATCH="$l"
           fi
         done
+
+        # Trim Whitespaces
+        MATCH_LABEL="$(echo "$MATCH_LABEL | xargs)"
 
         if [ -z "MATCH_LABEL" ]; then
           echo "::error::No valid release label found"
@@ -44,5 +45,5 @@ runs:
         fi
 
         echo "release_type=$MATCH_LABEL" >> $GITHUB_OUTPUT
-        
+
         echo "Label check complete"
