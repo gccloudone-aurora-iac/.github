@@ -11,6 +11,7 @@ inputs:
       - PATCH
       - MINOR
       - MAJOR
+      - SKIP
   release_branch:
     description: "The branch to use for creating the release"
     required: true
@@ -54,6 +55,7 @@ runs:
     run: echo "NEW_TAG=v$(($MAJOR)).$((MINOR)).$((PATCH+1))" >> $GITHUB_ENV
 
   - name: Create Release
+    if: (github.event.inputs.release_type != 'SKIP' || inputs.release_type != 'SKIP')
     env:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       GH_REPO: ${{ github.repository }}
