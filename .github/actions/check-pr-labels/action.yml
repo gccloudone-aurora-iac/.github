@@ -5,7 +5,7 @@ inputs:
   allowed_labels:
     description: "Comma-separated list of allowed labels"
     required: true
-    default: MAJOR,MINOR,PATCH
+    default: MAJOR,MINOR,PATCH,SKIP
 
 outputs:
   release_type:
