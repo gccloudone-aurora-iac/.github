@@ -64,6 +64,12 @@ runs:
       gh release create $NEW_TAG --generate-notes --latest --target ${{ inputs.release_branch }}
       gh release view $NEW_TAG
 
+  - name: Create Release
+    if: (github.event.inputs.release_type == 'SKIP' || inputs.release_type == 'SKIP')
+    shell: bash
+    run: |-
+      echo "Found input label SKIP - skipped release action"
+
 
 
 
