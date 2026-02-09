@@ -1,0 +1,53 @@
+name: "PR Label Check"
+description: "Ensures PR has exactly one valid release label"
+
+inputs:
+  allowed_labels:
+    description: "Comma-separated list of allowed labels"
+    required: true
+    default: MAJOR,MINOR,PATCH
+
+outputs:
+  release_type:
+    description: "Resolved release type"
+    value: ${{ steps.resolve.outputs.release_type }}
+
+
+runs:
+  using: composite
+  steps:
+    - id: resolve
+      shell: bash
+      run: |-
+        ALLOWED_LABELS="${{ inputs.allowed_labels }}"
+        LABELS=$(jq -r '.pull_request.labels[].name' "$GITHUB_EVENT_PATH")
+        echo "$LABELS"
+
+        if [ -z "$LABELS" ]; then
+          echo "::error::PR has no labels"
+          exit 1
+        fi
+
+        MATCH_LABEL=""
+
+        for l in $(echo "$ALLOWED_LABELS" | tr ',' ' '); do
+          if echo "$LABELS" | grep -qx "$l"; then
+            MATCH_LABEL="$l"
+            break
+          fi
+        done
+
+        if [ -z "MATCH_LABEL" ]; then
+          echo "::error::No valid release label found"
+          exit 1
+        fi
+
+        if [ "$(echo "$LABELS" | wc -l)" -gt 1 ]; then
+          echo "::error::Multiple labels found"
+          exit 1
+        fi
+
+        TYPE="${MATCH_LABEL}"
+        echo "release_type=$MATCH_LABEL" >> $GITHUB_OUTPUT
+
+        echo "Label check complete"
