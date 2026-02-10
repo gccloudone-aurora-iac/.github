@@ -55,7 +55,7 @@ runs:
     run: echo "NEW_TAG=v$(($MAJOR)).$((MINOR)).$((PATCH+1))" >> $GITHUB_ENV
 
   - name: Create Release
-    if: (github.event.inputs.release_type != 'SKIP' || inputs.release_type != 'SKIP')
+    if: ${{ (github.event.inputs.release_type != 'SKIP') || (inputs.release_type != 'SKIP') }}
     env:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       GH_REPO: ${{ github.repository }}
@@ -64,7 +64,7 @@ runs:
       gh release create $NEW_TAG --generate-notes --latest --target ${{ inputs.release_branch }}
       gh release view $NEW_TAG
 
-  - name: Create Release
+  - name: Skip Release
     if: (github.event.inputs.release_type == 'SKIP' || inputs.release_type == 'SKIP')
     shell: bash
     run: |-
