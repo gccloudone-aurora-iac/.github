@@ -40,34 +40,32 @@ runs:
       echo "PATCH=$(echo $CURRENT_TAG | cut -d '.' -f 3)" >> $GITHUB_ENV
 
   - name: Generate new MAJOR version
-    if: (github.event.inputs.release_type == 'MAJOR' || inputs.release_type == 'MAJOR')
+    if: ${{ inputs.release_type == 'MAJOR' }}
     shell: bash
     run: echo "NEW_TAG=v$(($MAJOR+1)).0.0" >> $GITHUB_ENV
 
   - name: Generate new MINOR version
-    if: (github.event.inputs.release_type == 'MINOR' || inputs.release_type == 'MINOR')
+    if: ${{ inputs.release_type == 'MINOR' }}
     shell: bash
     run: echo "NEW_TAG=v$(($MAJOR)).$((MINOR+1)).0" >> $GITHUB_ENV
 
   - name: Generate new PATCH version
-    if: (github.event.inputs.release_type == 'PATCH' || inputs.release_type == 'PATCH')
+    if: ${{ inputs.release_type == 'PATCH' }}
     shell: bash
     run: echo "NEW_TAG=v$(($MAJOR)).$((MINOR)).$((PATCH+1))" >> $GITHUB_ENV
 
   - name: Create Release
-    if: ${{ (github.event.inputs.release_type != 'SKIP') || (inputs.release_type != 'SKIP') }}
+    if: ${{ inputs.release_type != 'SKIP' }}
     env:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       GH_REPO: ${{ github.repository }}
     shell: bash
     run: |-
-      echo "Left value is ${{ github.event.inputs.release_type }}"
-      echo "Right value is ${{ inputs.release_type }}"
-      #gh release create $NEW_TAG --generate-notes --latest --target ${{ inputs.release_branch }}
-      #gh release view $NEW_TAG
+      gh release create $NEW_TAG --generate-notes --latest --target ${{ inputs.release_branch }}
+      gh release view $NEW_TAG
 
   - name: Skip Release
-    if: (github.event.inputs.release_type == 'SKIP' || inputs.release_type == 'SKIP')
+    if: ${{ inputs.release_type == 'SKIP' }}
     shell: bash
     run: |-
       echo "Found input label SKIP - skipped release action"
