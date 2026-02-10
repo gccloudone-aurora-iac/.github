@@ -61,8 +61,10 @@ runs:
       GH_REPO: ${{ github.repository }}
     shell: bash
     run: |-
-      gh release create $NEW_TAG --generate-notes --latest --target ${{ inputs.release_branch }}
-      gh release view $NEW_TAG
+      echo "Left value is ${{ github.event.inputs.release_type }}"
+      echo "Right value is ${{ inputs.release_type }}"
+      #gh release create $NEW_TAG --generate-notes --latest --target ${{ inputs.release_branch }}
+      #gh release view $NEW_TAG
 
   - name: Skip Release
     if: (github.event.inputs.release_type == 'SKIP' || inputs.release_type == 'SKIP')
